@@ -133,29 +133,29 @@ main =
 			emptyEnv
 			(withchurch (tochurch 4))) ==
 		[Clos
-		  [("n-1",
-			  Clos
-				  [("n-1",
-					  Clos 
-						  [("n-1",
-							  Clos 
-								  [("n-1",
-									  Clos 
-										  [] 
+			[("n-1",
+				Clos
+					[("n-1",
+						Clos 
+							[("n-1",
+								Clos 
+									[("n-1",
+										Clos 
+											[] 
 											"f" 
 											(Λ "x" (Id "x"))),
 									 ("church-zero",
-									  Clos 
+										Clos 
 											[] 
 											"f" 
 											(Λ "x" 
-											  (Id "x")))]
+												(Id "x")))]
 									"f" 
 									(Λ "x" 
-									  (App (Id "f") 
-										  (App (App (Id "n-1") 
-											       (Id "f"))
-											  (Id "x"))))),
+										(App (Id "f") 
+											(App (App (Id "n-1") 
+														 (Id "f"))
+												(Id "x"))))),
 								("church-zero",
 								 Clos 
 									 [] 
@@ -165,31 +165,38 @@ main =
 							"f"
 							(Λ "x"
 								(App (Id "f")
-								  (App (App (Id "n-1") 
-									       (Id "f"))
+									(App (App (Id "n-1") 
+												 (Id "f"))
 										(Id "x"))))),
 					 ("church-zero",
-					  Clos 
-						  []
+						Clos 
+							[]
 							"f" 
 							(Λ "x"
 								(Id "x")))]
 					"f"
 					(Λ "x"
-					  (App (Id "f")
-						  (App (App (Id "n-1")
-							       (Id "f"))
-							  (Id "x"))))),
+						(App (Id "f")
+							(App (App (Id "n-1")
+										 (Id "f"))
+								(Id "x"))))),
 			 ("church-zero",
-			  Clos
-				  []
+				Clos
+					[]
 					"f"
 					(Λ "x"
-					  (Id "x")))]
+						(Id "x")))]
 			"f"
 			(Λ "x"
 				(App (Id "f")
 					(App (App (Id "n-1")
-							   (Id "f"))
+								 (Id "f"))
 						(Id "x"))))]
+		 &&
+		(valofp
+			emptyEnv
+			(withchurch (App (App (Id "church-plus")
+			                   (tochurch 2))
+									  (tochurch 2)))) ==
+		[Clos [("k",Clos [("n-1",Clos [("n-1",Clos [] "f" (Λ "x" (Id "x"))),("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))),("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))),("j",Clos [("n-1",Clos [("n-1",Clos [] "f" (Λ "x" (Id "x"))),("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))),("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))),("church-add1",Clos [("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "n-1" (Λ "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",Clos [] "f" (Λ "x" (Id "x")))] "f" (Λ "x" (App (App (Id "j") (Id "f")) (App (App (Id "k") (Id "f")) (Id "x"))))]
 	)
