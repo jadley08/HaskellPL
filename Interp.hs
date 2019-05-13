@@ -1,6 +1,8 @@
 import Helpers
 import Data.Maybe
 
+-- λ-calculus interpreter using closures
+
 -- Data Definition -------------------
 data Identifier = Id String deriving (Eq,Show)
 
@@ -46,5 +48,15 @@ valof ρ (App rator rand) = let ratorclos = valof ρ rator in
 -- Tests -----------------------------
 main =
 	print (
-		1
+		(valof
+		  emptyEnv
+			(Λ (Id "x")
+				(Λ (Id "x")
+					(Λ (Id "y")
+						(App (EId (Id "y")) (EId (Id "x"))))))) ==
+		Just (Clos [] 
+							 (Id "x")
+								 (Λ (Id "x")
+						       (Λ (Id "y")
+							       (App (EId (Id "y")) (EId (Id "x"))))))
 	)
