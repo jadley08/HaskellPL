@@ -118,4 +118,15 @@ main =
 		[Clos []
 		      (Id "f")
 					(Λ (Id "x") (EId (Id "x")))]
+		&&
+		(valofp
+		  emptyEnv
+			(withchurch (tochurch 1))) ==
+		[Clos [(Id "n-1",Clos [] (Id "f") (Λ (Id "x") (EId (Id "x")))),
+					 (Id "church-zero",Clos [] (Id "f") (Λ (Id "x") (EId (Id "x"))))]
+					(Id "f")
+					(Λ (Id "x")
+						(App (EId (Id "f"))
+							(App (App (EId (Id "n-1")) (EId (Id "f")))
+								(EId (Id "x")))))]
 	)
