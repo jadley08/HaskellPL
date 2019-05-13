@@ -96,7 +96,7 @@ main =
 							 (Λ "x"
 								 (Λ "y"
 									 (App (Id "y") (Id "x")))))
-		&&
+		 &&
 		(valofp
 			emptyEnv
 			[ExecD (Def "id"
@@ -110,14 +110,14 @@ main =
 		[Clos [("id",Clos [] "x" (Id "x"))]
 					"y"
 					(Λ "z" (App (Id "z") (Id "y")))]
-		&&
+		 &&
 		(valofp
 			emptyEnv
 			(withchurch (tochurch 0))) ==
 		[Clos []
 					"f"
 					(Λ "x" (Id "x"))]
-		&&
+		 &&
 		(valofp
 			emptyEnv
 			(withchurch (tochurch 1))) ==
@@ -128,4 +128,68 @@ main =
 						(App (Id "f")
 							(App (App (Id "n-1") (Id "f"))
 								(Id "x"))))]
+		 &&
+		(valofp
+			emptyEnv
+			(withchurch (tochurch 4))) ==
+		[Clos
+		  [("n-1",
+			  Clos
+				  [("n-1",
+					  Clos 
+						  [("n-1",
+							  Clos 
+								  [("n-1",
+									  Clos 
+										  [] 
+											"f" 
+											(Λ "x" (Id "x"))),
+									 ("church-zero",
+									  Clos 
+											[] 
+											"f" 
+											(Λ "x" 
+											  (Id "x")))]
+									"f" 
+									(Λ "x" 
+									  (App (Id "f") 
+										  (App (App (Id "n-1") 
+											       (Id "f"))
+											  (Id "x"))))),
+								("church-zero",
+								 Clos 
+									 [] 
+									 "f" 
+									 (Λ "x" 
+										 (Id "x")))] 
+							"f"
+							(Λ "x"
+								(App (Id "f")
+								  (App (App (Id "n-1") 
+									       (Id "f"))
+										(Id "x"))))),
+					 ("church-zero",
+					  Clos 
+						  []
+							"f" 
+							(Λ "x"
+								(Id "x")))]
+					"f"
+					(Λ "x"
+					  (App (Id "f")
+						  (App (App (Id "n-1")
+							       (Id "f"))
+							  (Id "x"))))),
+			 ("church-zero",
+			  Clos
+				  []
+					"f"
+					(Λ "x"
+					  (Id "x")))]
+			"f"
+			(Λ "x"
+				(App (Id "f")
+					(App (App (Id "n-1")
+							   (Id "f"))
+						(Id "x"))))]
 	)
