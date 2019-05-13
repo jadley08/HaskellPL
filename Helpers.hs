@@ -1,6 +1,6 @@
 module Helpers where
 
-data Exp = Var String | Lam String Exp | App Exp Exp | EInt Int deriving (Show)
+--data Exp = Var String | Lam String Exp | App Exp Exp | EInt Int deriving (Show)
 
 sub1 :: (Integral n) => n -> n
 sub1 0 = 0
