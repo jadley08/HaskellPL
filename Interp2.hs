@@ -2,6 +2,7 @@ import Helpers
 import Data.Maybe
 
 -- λ-calculus interpreter using closures
+-- Consider replacing all occurences of Identifier with String
 
 -- Data Definition -------------------
 data Identifier = Id String deriving (Eq,Show)
