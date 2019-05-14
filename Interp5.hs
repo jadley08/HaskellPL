@@ -58,20 +58,12 @@ elimWhichNat tgt base step = if isZero tgt
 
 valof :: ValueEnv -> Expr -> Value
 valof ρ (Id y)                   = fromJust (lookp ρ y)
-valof ρ (WhichNat tgt base step) = elimWhichNat (valof ρ tgt)
-                                                (valof ρ base)
-																								(valof ρ step)
+valof ρ (ENat n)                 = (VN n)
+valof ρ (WhichNat tgt base step) = elimWhichNat (valof ρ tgt) (valof ρ base) (valof ρ step)
+valof ρ (IterNat tgt base step)  = elimWhichNat (valof ρ tgt) (valof ρ base) (valof ρ step)
+valof ρ (RecNat tgt base step)   = elimWhichNat (valof ρ tgt) (valof ρ base) (valof ρ step)
 valof ρ (Λ x b)                  = VC (Clos ρ x b)
-valof ρ (App rator rand)         = let ratorval = valof ρ rator in
-                                   let ratorclos = fromVC ratorval in
-													         let ratorρ = closρ ratorclos in
-													         let ratorid = closid ratorclos in
-													         let ratorexp = closexp ratorclos in
-                                   let randval = valof ρ rand in
-													         (valof (extend ratorρ
-													                        ratorid
-																					        randval)
-																	        ratorexp)
+valof ρ (App rator rand)         = elimFun (valof ρ rator) (valof ρ rand)
 
 -- Program ---------------------------
 data Define = Def String Expr deriving (Eq,Show)
@@ -170,4 +162,11 @@ main =
 								(tochurch 2)))) ==
 		[VC (Clos [("k",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("j",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f"
 		(Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-add1",VC (Clos [("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "n-1" (Λ "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (App (Id "j") (Id "f")) (App (App (Id "k") (Id "f")) (Id "x")))))]
+		&&
+		(valofp
+		  emptyEnv
+			[ExecE (WhichNat (ENat Zero)
+			                 (ENat (Add1 Zero))
+											 (Λ "x" (Id "x")))]) ==
+		[VN (Add1 Zero)]
 	)
