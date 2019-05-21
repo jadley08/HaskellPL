@@ -118,115 +118,115 @@ tochurch n = App (Id "church-add1")
 -- Tests -----------------------------
 main =
   print (
-    --(valof
-    --  emptyEnv
-    --  (Λ "x"
-    --    (Λ "x"
-    --      (Λ "y"
-    --        (App (Id "y") (Id "x")))))) ==
-    --(VC (Clos [] 
-    --           "x"
-    --           (Λ "x"
-    --             (Λ "y"
-    --               (App (Id "y") (Id "x"))))))
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  [ExecD (Def "id"
-    --           (Λ "x"
-    --             (Id "x"))),
-    --   ExecE (App (Id "id")
-    --           (Λ "y"
-    --             (Λ "z"
-    --               (App (Id "z")
-    --                 (Id "y")))))]) ==
-    --[VC (Clos [("id",VC (Clos [] "x" (Id "x")))]
-    --      "y"
-    --      (Λ "z" (App (Id "z") (Id "y"))))]
-    -- &&
-		--(valofp
-    --  emptyEnv
-    --  (withchurch (tochurch 0))) ==
-    --[VC (Clos []
-    --      "f"
-    --      (Λ "x" (Id "x")))]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  (withchurch (tochurch 1))) ==
-    --[VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),
-    --       ("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))]
-    --      "f"
-    --      (Λ "x"
-    --        (App (Id "f")
-    --          (App (App (Id "n-1") (Id "f"))
-    --            (Id "x")))))]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  (withchurch (tochurch 4))) ==
-    --[VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  (withchurch (App (App (Id "church-plus")
-    --                     (tochurch 2))
-    --            (tochurch 2)))) ==
-    --[VC (Clos [("k",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("j",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f"
-    --(Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-add1",VC (Clos [("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "n-1" (Λ "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (App (Id "j") (Id "f")) (App (App (Id "k") (Id "f")) (Id "x")))))]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  [ExecE (WhichNat Zero
-    --                   (Add1 Zero)
-    --                   (Λ "x" (Id "x")))])
-    -- ==
-    --[VN (Add1 Zero)]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  [ExecE (WhichNat (Add1 Zero)
-    --                   (Add1 Zero)
-    --                   (Λ "x" (Id "x")))])
-    -- ==
-    --[VN Zero]
-    -- &&
-    --(valofp
-    --  []
-    --  [ExecE (IterNat (Add1 (Add1 Zero))
-    --                  (Add1 (Add1 (Add1 Zero)))
-    --                  (Λ "+n-1" (Add1 (Id "+n-1"))))]) ==
-    --[VN (Add1 (Add1 (Add1 (Add1 (Add1 Zero)))))]
-    -- &&
-    --(valofp
-    --  []
-    --  [ExecD (Def "step-+"
-    --              (Λ "+n-1" (Add1 (Id "+n-1")))),
-    --   ExecE (IterNat (Add1 (Add1 Zero))
-    --                  (Add1 (Add1 (Add1 Zero)))
-    --                  (Id "step-+"))]) ==
-    --[VN (Add1 (Add1 (Add1 (Add1 (Add1 Zero)))))]
-    -- &&
-    --(valofp
-    --  emptyEnv
-    --  [ExecE (RecNat (Add1 (Add1 Zero))
-    --                 Zero
-    --                 (Λ "n-1"
-    --                   (Λ "rec-n-1"
-    --                     (Add1 (Id "rec-n-1")))))]) ==
-    --[VN (Add1 (Add1 Zero))]
-		-- &&
-		(valofp
-		  emptyEnv
-			[ExecE (App (Λ "n"
-			              (Λ "m"
-										  (RecNat (Id "n")
-											        (Id "m")
-															(Λ "cur-1"
-															  (Λ "m+cur-1"
-																  (Add1 (Id "m+cur-1")))))))
-									(Add1 (Add1 (Add1 Zero)))),
-			 ExecE (Add1 (Add1 Zero))]) ==
-		[VC (Clos [("n",VN (Add1 (Add1 (Add1 Zero))))] "m" (RecNat (Id "n") (Id "m") (Λ "cur-1" (Λ "m+cur-1" (Add1 (Id "m+cur-1")))))),
-		 VN (Add1 (Add1 Zero))]
+    (valof
+      emptyEnv
+      (Λ "x"
+        (Λ "x"
+          (Λ "y"
+            (App (Id "y") (Id "x")))))) ==
+    (VC (Clos [] 
+               "x"
+               (Λ "x"
+                 (Λ "y"
+                   (App (Id "y") (Id "x"))))))
+     &&
+    (valofp
+      emptyEnv
+      [ExecD (Def "id"
+               (Λ "x"
+                 (Id "x"))),
+       ExecE (App (Id "id")
+               (Λ "y"
+                 (Λ "z"
+                   (App (Id "z")
+                     (Id "y")))))]) ==
+    [VC (Clos [("id",VC (Clos [] "x" (Id "x")))]
+          "y"
+          (Λ "z" (App (Id "z") (Id "y"))))]
+     &&
+    (valofp
+      emptyEnv
+      (withchurch (tochurch 0))) ==
+    [VC (Clos []
+          "f"
+          (Λ "x" (Id "x")))]
+     &&
+    (valofp
+      emptyEnv
+      (withchurch (tochurch 1))) ==
+    [VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),
+           ("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))]
+          "f"
+          (Λ "x"
+            (App (Id "f")
+              (App (App (Id "n-1") (Id "f"))
+                (Id "x")))))]
+     &&
+    (valofp
+      emptyEnv
+      (withchurch (tochurch 4))) ==
+    [VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))]
+     &&
+    (valofp
+      emptyEnv
+      (withchurch (App (App (Id "church-plus")
+                         (tochurch 2))
+                (tochurch 2)))) ==
+    [VC (Clos [("k",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f" (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("j",VC (Clos [("n-1",VC (Clos [("n-1",VC (Clos [] "f"
+    (Λ "x" (Id "x")))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x")))))),("church-add1",VC (Clos [("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "n-1" (Λ "f" (Λ "x" (App (Id "f") (App (App (Id "n-1") (Id "f")) (Id "x"))))))),("church-zero",VC (Clos [] "f" (Λ "x" (Id "x"))))] "f" (Λ "x" (App (App (Id "j") (Id "f")) (App (App (Id "k") (Id "f")) (Id "x")))))]
+     &&
+    (valofp
+      emptyEnv
+      [ExecE (WhichNat Zero
+                       (Add1 Zero)
+                       (Λ "x" (Id "x")))])
+     ==
+    [VN (Add1 Zero)]
+     &&
+    (valofp
+      emptyEnv
+      [ExecE (WhichNat (Add1 Zero)
+                       (Add1 Zero)
+                       (Λ "x" (Id "x")))])
+     ==
+    [VN Zero]
+     &&
+    (valofp
+      []
+      [ExecE (IterNat (Add1 (Add1 Zero))
+                      (Add1 (Add1 (Add1 Zero)))
+                      (Λ "+n-1" (Add1 (Id "+n-1"))))]) ==
+    [VN (Add1 (Add1 (Add1 (Add1 (Add1 Zero)))))]
+     &&
+    (valofp
+      []
+      [ExecD (Def "step-+"
+                  (Λ "+n-1" (Add1 (Id "+n-1")))),
+       ExecE (IterNat (Add1 (Add1 Zero))
+                      (Add1 (Add1 (Add1 Zero)))
+                      (Id "step-+"))]) ==
+    [VN (Add1 (Add1 (Add1 (Add1 (Add1 Zero)))))]
+     &&
+    (valofp
+      emptyEnv
+      [ExecE (RecNat (Add1 (Add1 Zero))
+                     Zero
+                     (Λ "n-1"
+                       (Λ "rec-n-1"
+                         (Add1 (Id "rec-n-1")))))]) ==
+    [VN (Add1 (Add1 Zero))]
+     &&
+    (valofp
+      emptyEnv
+      [ExecE (App (Λ "n"
+                    (Λ "m"
+                      (RecNat (Id "n")
+                              (Id "m")
+                              (Λ "cur-1"
+                                (Λ "m+cur-1"
+                                  (Add1 (Id "m+cur-1")))))))
+                  (Add1 (Add1 (Add1 Zero)))),
+       ExecE (Add1 (Add1 Zero))]) ==
+    [VC (Clos [("n",VN (Add1 (Add1 (Add1 Zero))))] "m" (RecNat (Id "n") (Id "m") (Λ "cur-1" (Λ "m+cur-1" (Add1 (Id "m+cur-1")))))),
+     VN (Add1 (Add1 Zero))]
   )
