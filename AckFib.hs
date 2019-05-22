@@ -24,6 +24,11 @@ ackcps 0 n k = k (add1 n)
 ackcps m 0 k = ackcps (sub1 m) 1 k
 ackcps m n k = ackcps m (sub1 n) (\almost -> ackcps (sub1 m) almost k)
 
+fibcps :: Int -> (Int -> Int) -> Int
+fibcps 0 k = k 0
+fibcps 1 k = k 1
+fibcps n k = (fibcps (sub1 n) k) + (fibcps (sub1 (sub1 n)) k)
+
 -- Store Passing Style -------------------
 acksps :: Int -> Int -> [((Int,Int),Int)] -> (Int,[((Int,Int),Int)])
 acksps 0 n store = (add1 n,store)
@@ -74,6 +79,8 @@ main =
      &&
     ackcps 2 2 emptyk == 7
      &&
+		fibcps 7 emptyk == 13
+		 &&
     acksps 2 1 emptys == (5,[((2,1),5),((1,3),5),((1,2),4),((2,0),3),((1,1),3),((1,0),2)])
      &&
     acksps 2 2 emptys == (7,[((2,2),7),((1,5),7),((1,4),6),((2,1),5),((1,3),5),((1,2),4),((2,0),3),((1,1),3),((1,0),2)])
